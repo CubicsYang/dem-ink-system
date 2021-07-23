@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+  <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'"> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script>
+    window.$ = window.jQuery = require("jquery");
+
+  </script>
+  <!-- 新 Bootstrap4 核心 CSS 文件 -->
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+
+  <link href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.2.2/css/fileinput.min.css" media="all"
+    rel="stylesheet" type="text/css">
+  <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+  <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+
+  <!-- bootstrap.bundle.min.js 用于弹窗、提示、下拉菜单，包含了 popper.min.js -->
+  <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+
+  <!-- the main fileinput plugin script JS file -->
+  <script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.2.2/js/fileinput.min.js"></script>
+
+  <!-- optionally if you need translation for your language then include the locale file as mentioned below (replace LANG.js with your language locale) -->
+  <script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.2.2/js/locales/zh.js"></script>
+
+  <!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
+  <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6 text-center">
+        <h2>输入DEM数据</h2>
+        <input id="input-b1" name="input-b1" type="file" class="file" data-browse-on-zone-click="true">
+      </div>
+      <div class="col-sm-6 text-center">
+        <h2>生成数据</h2>
+        <div class="card">
+          <div class="card-body">
+            <img src="https://static.runoob.com/images/mix/cinqueterre.jpg" class="img-thumbnail">
+          </div>
+          <div class="card-footer">
+            <button type="button" id="btn_download" class="btn btn-primary btn-block">另存为</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <button type="button" id="btn_task" class="btn btn-primary btn-lg btn-block">开始转换</button>
+    </div>
+  </div>
+  <script src="./renderer.js"></script>
+  <script>
+    $("#input-b1").fileinput({//#file-5是input框的id
+      language: 'zh'//设置语言为中文
+    })
+    $("#btn_task").click(() =>
+      pyExec('data to process')
+    )
+    function pyExec(text) {
+      var exec = require('child_process').exec;
+
+      exec('python py/test.py ', function (error, stdout, stderr) {
+        if (stdout.length > 1) {
+          console.log(stdout);
+        } else {
+          console.log('you don\'t offer args');
+        }
+      });
+    }
+
+  </script>
+</body>
+
+</html>
