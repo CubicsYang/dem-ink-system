@@ -8,7 +8,7 @@ const {
 const path = require('path')
 //定义菜单模板
 const template = require('./menu')
-
+const fs = require('fs')
 
 function createWindow() {
   const {

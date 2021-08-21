@@ -1,10 +1,10 @@
 [
     {
-        "style": "style1",
-        "link": "1.jpg"
+        "style": "披麻皴",
+        "link": "assets/res/img/fg1披麻皴.jpg"
     },
     {
-        "style": "style2",
-        "link": "2.jpg"
+        "style": "荷叶皴",
+        "link": "assets/res/img/fg2荷叶皴.jpg"
     }
 ]

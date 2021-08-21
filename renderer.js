@@ -4,45 +4,60 @@
 // `nodeIntegration` is turned off. Use `preload.js` to
 // selectively enable features needed in the rendering
 // process.
-var dropdownmenu = new Vue({
-    el: '#style-dropdown-menu',
-    data: {
-        items: [{
-            "style": "style1"
-        }]
+
+var vm = new Vue({
+    el: '#container',
+    data() {
+        return {
+            dempic: "https://static.runoob.com/images/mix/cinqueterre.jpg",
+            stylepic: "https://static.runoob.com/images/mix/cinqueterre.jpg",
+            items: []
+        }
     },
     created() {
         axios.get('assets/res/style.json')
             .then(function (response) {
                 console.log(response.data);
-                Vue.set(dropdownmenu, 'items', response.data);
+                Vue.set(vm, 'items', response.data);
             })
             .catch(function (error) {
                 console.log(error);
             });
     },
     methods: {
+        selectStyle: function (event) {
+            selectValue = event.target.innerText
+            axios.get('assets/res/style.json')
+                .then(function (response) {
+                    data = response.data;
+                    data.forEach(element => {
+                        if (element.style == selectValue) {
+                            Vue.set(vm, 'stylepic', element.link);
+                        }
+                    });
+                })
+        },
+        transfer_btn: () => {
+            pyExec('data to process')
 
+            // 注意用箭头函数时， console.log(this.style_pic.src)可获取完整路径
+            stylepic_link = decodeURIComponent(this.style_pic.src.split('///')[1])
+            dempic_link = decodeURIComponent(this.dem_pic.src.split('///')[1])
+            console.log("s:" + stylepic_link)
+            console.log("d:" + dempic_link)
+            if (stylepic_link == 'undefined') {
+                alert("not selected stylepic")
+                // dialog.showErrorBox('警告', '操作有误');
+            }
+            if (dempic_link == 'undefined') {
+                alert("not selected dempic")
+                // dialog.showErrorBox('警告', '操作有误');
+            }
+            // console.log(this.stylepic)
+        },
+        dempicSelect: (event) => {
+            path = document.getElementById("inputGroupFile").files[0].path
+            Vue.set(vm, 'dempic', path);
+        }
     }
 })
-$("#input-b1").fileinput({ //#file-5是input框的id
-    language: 'zh', //设置语言为中文
-    showUpload: false, //不显示上传按钮
-    maxFileCount: 5,
-    allowedFileTypes: ["image"]
-})
-$("#btn_task").click(() =>
-    pyExec('data to process')
-)
-
-function pyExec(text) {
-    var exec = require('child_process').exec;
-
-    exec('python py/test.py ', function (error, stdout, stderr) {
-        if (stdout.length > 1) {
-            console.log(stdout);
-        } else {
-            console.log('you don\'t offer args');
-        }
-    });
-}
