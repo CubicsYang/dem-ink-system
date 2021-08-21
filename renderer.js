@@ -38,8 +38,6 @@ var vm = new Vue({
                 })
         },
         transfer_btn: () => {
-            pyExec('data to process')
-
             // 注意用箭头函数时， console.log(this.style_pic.src)可获取完整路径
             stylepic_link = decodeURIComponent(this.style_pic.src.split('///')[1])
             dempic_link = decodeURIComponent(this.dem_pic.src.split('///')[1])
@@ -47,17 +45,28 @@ var vm = new Vue({
             console.log("d:" + dempic_link)
             if (stylepic_link == 'undefined') {
                 alert("not selected stylepic")
-                // dialog.showErrorBox('警告', '操作有误');
-            }
-            if (dempic_link == 'undefined') {
+            } else if (dempic_link == 'undefined') {
                 alert("not selected dempic")
-                // dialog.showErrorBox('警告', '操作有误');
+            } else {
+
             }
+            condaCMD('tensorflow-style-transfer')
             // console.log(this.stylepic)
         },
         dempicSelect: (event) => {
             path = document.getElementById("inputGroupFile").files[0].path
             Vue.set(vm, 'dempic', path);
         }
+    }
+})
+
+var zerorpc = require("zerorpc");
+var client = new zerorpc.Client();
+client.connect("tcp://127.0.0.1:4242");
+client.invoke("hello", "world", (error, res) => {
+    if (error) {
+        console.error(error)
+    } else {
+        result.textContent = res
     }
 })
