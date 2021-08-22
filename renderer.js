@@ -60,13 +60,13 @@ var vm = new Vue({
     }
 })
 
-var zerorpc = require("zerorpc");
-var client = new zerorpc.Client();
-client.connect("tcp://127.0.0.1:4242");
-client.invoke("hello", "world", (error, res) => {
-    if (error) {
-        console.error(error)
-    } else {
-        result.textContent = res
-    }
-})
+// var zerorpc = require("zerorpc");
+// var client = new zerorpc.Client();
+// client.connect("tcp://127.0.0.1:4242");
+// client.invoke("hello", "world", (error, res) => {
+//     if (error) {
+//         console.error(error)
+//     } else {
+//         result.textContent = res
+//     }
+// })

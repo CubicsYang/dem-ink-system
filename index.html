@@ -80,13 +80,16 @@
 <script>
   const exec = require('child_process').exec;
   function condaCMD(condaEnv) {
-    // exec('conda activate ' + condaEnv, function (error, stdout, stderr) {
-    //   print(error, stdout, stderr);
-    // })
+    exec('conda activate ' + condaEnv, function (error, stdout, stderr) {
+      console.log("e：" + errosr);
+      console.log("se：" + stderr);
+      console.log("so：" + stdout);
+    })
     cmd = 'python py/transfer-style/run_main.py --content' + ' py/transfer-style/H_content/yuanshi20.jpg ' + '--style py/transfer-style/H_style/fg6.jpg ' + '--output py/transfer-style/H_results/yuanshi20_fg6.jpg'
-    exec(cmd, function (error, stdout, stderr) {
-      print(error, stdout, stderr);
-    });
+    // cmd = 'python py/test.py'
+    // exec(cmd, function (error, stdout, stderr) {
+    //   console.log(error, stdout, stderr);
+    // });
   }
 </script>
 
