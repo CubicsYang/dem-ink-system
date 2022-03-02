@@ -11,26 +11,6 @@ const path = require('path')
 const template = require('./menu')
 const fs = require('fs')
 
-let pyProc = null
-let pyPort = null
-
-const createPyProc = () => {
-  let port = '4242'
-  let script = path.join(__dirname, 'py', 'test.py')
-  pyProc = require('child_process').spawn('python', [script, port])
-  if (pyProc != null) {
-    console.log('child process success')
-  }
-}
-
-const exitPyProc = () => {
-  pyProc.kill()
-  pyProc = null
-  pyPort = null
-}
-
-app.on('ready', createPyProc)
-app.on('will-quit', exitPyProc)
 
 function createWindow() {
   const {

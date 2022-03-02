@@ -20,10 +20,10 @@
         <h2>输入DEM图片数据</h2>
         <div class="card">
           <div class="card-body">
-            <img id="dem_pic" :src="dempic" class="img-thumbnail">
+            <img id="dem_pic" :src="dempic" class="img-thumbnail" style="height:300px;">
           </div>
           <div class="card-footer">
-            <input type="file" class="form-control" id="inputGroupFile" v-on:change="dempicSelect">
+            <input type="file" class="form-control" id="inputGroupFile" v-on:change="dempicSelected">
           </div>
         </div>
       </div>
@@ -31,10 +31,10 @@
     <br>
     <div class="row">
       <div id='styleSelector' class="col-sm-6 text-center">
-        <h2>迁移风格选择</h2>
+        <h2>迁移风格-{{styleText}}</h2>
         <div class="card">
           <div class="card-body">
-            <img id="style_pic" :src="stylepic" class="img-thumbnail">
+            <img id="style_pic" :src="stylepic" class="img-thumbnail" style="height:300px ;">
           </div>
           <div class="card-footer">
             <div class="dropdown">
@@ -43,7 +43,7 @@
                 选择
               </button>
               <ul class="dropdown-menu" id='style-dropdown-menu' aria-labelledby="dropdownMenuButton1">
-                <a class="dropdown-item" v-on:click="selectStyle" v-for="item in items" :key="item.style">
+                <a class="dropdown-item" v-on:click="styleSelected" v-for="item in items" :key="item.style">
                   {{ item.style }}
                 </a>
               </ul>
@@ -55,9 +55,9 @@
         <h2>生成数据</h2>
         <div class="card">
           <div class="card-body">
-            <img src="https://static.runoob.com/images/mix/cinqueterre.jpg" class="img-thumbnail">
+            <img id="result_pic" :src="resultpic" class="img-thumbnail" style="height:300px;">
           </div>
-          <div class="card-footer">
+          <div class=" card-footer">
             <button type="button" id="btn_download" class="btn btn-primary btn-block">另存为</button>
           </div>
         </div>
@@ -78,19 +78,6 @@
   <script src="./renderer.js"></script>
 </body>
 <script>
-  const exec = require('child_process').exec;
-  function condaCMD(condaEnv) {
-    exec('conda activate ' + condaEnv, function (error, stdout, stderr) {
-      console.log("e：" + errosr);
-      console.log("se：" + stderr);
-      console.log("so：" + stdout);
-    })
-    cmd = 'python py/transfer-style/run_main.py --content' + ' py/transfer-style/H_content/yuanshi20.jpg ' + '--style py/transfer-style/H_style/fg6.jpg ' + '--output py/transfer-style/H_results/yuanshi20_fg6.jpg'
-    // cmd = 'python py/test.py'
-    // exec(cmd, function (error, stdout, stderr) {
-    //   console.log(error, stdout, stderr);
-    // });
-  }
 </script>
 
 </html>

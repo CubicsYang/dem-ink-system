@@ -9,8 +9,13 @@ var vm = new Vue({
     el: '#container',
     data() {
         return {
-            dempic: "https://static.runoob.com/images/mix/cinqueterre.jpg",
-            stylepic: "https://static.runoob.com/images/mix/cinqueterre.jpg",
+            //TODO:更改选择文件栏默认为空
+            dempic: "./exe/yuanshi22.jpg",
+            stylepic: "./exe/fg1.jpg",
+            resultpic: "https://static.runoob.com/images/mix/cinqueterre.jpg",
+            styleText: "披麻皴",
+            //appPath: "G:\dem-ink-system",
+            appPath: __dirname,
             items: []
         }
     },
@@ -23,9 +28,15 @@ var vm = new Vue({
             .catch(function (error) {
                 console.log(error);
             });
+        console.log(this.appPath)
     },
     methods: {
-        selectStyle: function (event) {
+        dempicSelected: (event) => {
+            path = document.getElementById("inputGroupFile").files[0].path
+            console.log(path)
+            Vue.set(vm, 'dempic', path);
+        },
+        styleSelected: (event) => {
             selectValue = event.target.innerText
             axios.get('assets/res/style.json')
                 .then(function (response) {
@@ -33,40 +44,48 @@ var vm = new Vue({
                     data.forEach(element => {
                         if (element.style == selectValue) {
                             Vue.set(vm, 'stylepic', element.link);
+                            Vue.set(vm, 'styleText', element.style);
                         }
                     });
                 })
         },
-        transfer_btn: () => {
-            // 注意用箭头函数时， console.log(this.style_pic.src)可获取完整路径
-            stylepic_link = decodeURIComponent(this.style_pic.src.split('///')[1])
-            dempic_link = decodeURIComponent(this.dem_pic.src.split('///')[1])
-            console.log("s:" + stylepic_link)
-            console.log("d:" + dempic_link)
-            if (stylepic_link == 'undefined') {
-                alert("not selected stylepic")
-            } else if (dempic_link == 'undefined') {
-                alert("not selected dempic")
-            } else {
-
-            }
-            condaCMD('tensorflow-style-transfer')
-            // console.log(this.stylepic)
-        },
-        dempicSelect: (event) => {
-            path = document.getElementById("inputGroupFile").files[0].path
-            Vue.set(vm, 'dempic', path);
+        transfer_btn: function () {
+            let appPath = this.appPath;
+            //stylepic_link:G:/dem-ink-system/exe/fg1.jpg
+            stylepic_link = decodeURIComponent(document.getElementById("style_pic").src.split('///')[1])
+            stylepic_name = stylepic_link.split('/')[stylepic_link.split('/').length - 1]
+            dempic_link = decodeURIComponent(document.getElementById("dem_pic").src.split('///')[1])
+            dempic_name = dempic_link.split('/')[dempic_link.split('/').length - 1]
+            let outputPath = 'yuanshi22_fg1.jpg';
+            let cmd = jointCommand(appPath + '/exe/', dempic_link, stylepic_link, outputPath)
+            execCommandSync(cmd, outputPath);
         }
     }
 })
 
-// var zerorpc = require("zerorpc");
-// var client = new zerorpc.Client();
-// client.connect("tcp://127.0.0.1:4242");
-// client.invoke("hello", "world", (error, res) => {
-//     if (error) {
-//         console.error(error)
-//     } else {
-//         result.textContent = res
-//     }
-// })
+function jointCommand(rootPath, contentPath, stylePath, outputPath) {
+    var cmd = rootPath + 'style_transfer.exe' +
+        ' --content ' + contentPath +
+        ' --style ' + stylePath +
+        ' --output ' + rootPath + outputPath;
+    console.log(cmd);
+    return cmd;
+}
+
+function execCommandSync(command, outputPath) {
+    //TODO:判断是否成功运行
+    const exec = require('child_process').execSync;
+    exec(command, (e, stdout, stderr) => {
+        if (e instanceof Error) {
+            console.error(e);
+            throw e;
+        }
+        console.log('stdout ', stdout);
+        console.log('stderr ', stderr);
+        if (stdout == 'success') {
+            // if the transfer is successful, then show the result
+            console.log("success")
+            Vue.set(vm, 'resultpic', outputPath);
+        }
+    })
+}
