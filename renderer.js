@@ -58,7 +58,7 @@ var vm = new Vue({
             dempic_name = dempic_link.split('/')[dempic_link.split('/').length - 1]
             let outputPath = 'yuanshi22_fg1.jpg';
             let cmd = jointCommand(appPath + '/exe/', dempic_link, stylepic_link, outputPath)
-            execCommandSync(cmd, outputPath);
+            execCommandSync(cmd, appPath + '/exe/' + outputPath);
         }
     }
 })
@@ -73,19 +73,13 @@ function jointCommand(rootPath, contentPath, stylePath, outputPath) {
 }
 
 function execCommandSync(command, outputPath) {
-    //TODO:判断是否成功运行
-    const exec = require('child_process').execSync;
-    exec(command, (e, stdout, stderr) => {
-        if (e instanceof Error) {
-            console.error(e);
-            throw e;
-        }
-        console.log('stdout ', stdout);
-        console.log('stderr ', stderr);
-        if (stdout == 'success') {
-            // if the transfer is successful, then show the result
-            console.log("success")
-            Vue.set(vm, 'resultpic', outputPath);
-        }
-    })
+    const execSync = require('child_process').execSync;
+    try {
+        execSync(command);
+        console.log("success");
+        Vue.set(vm, 'resultpic', outputPath);
+    } catch (e) {
+        console.log("error");
+    }
+
 }
