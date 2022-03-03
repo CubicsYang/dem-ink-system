@@ -4,13 +4,6 @@
 // `nodeIntegration` is turned off. Use `preload.js` to
 // selectively enable features needed in the rendering
 // process.
-// const {
-//     dialog
-// } = require('electron').remote
-// let WIN = new BrowserWindow({
-//     width: 800,
-//     height: 600
-// })
 var vm = new Vue({
     el: '#container',
     data() {
@@ -22,6 +15,8 @@ var vm = new Vue({
             //appPath: "G:\dem-ink-system",
             appPath: __dirname,
             items: [],
+            progressValue: 0,
+            progressValueShow: false,
         }
     },
     created() {
@@ -56,7 +51,8 @@ var vm = new Vue({
 
         },
         transfer_btn: function () {
-
+            this.progressValueShow = true;
+            Vue.set(vm, 'progressValue', 10);
             let appPath = this.appPath;
             //stylepic_link:G:/dem-ink-system/exe/fg1.jpg
             stylepic_link = decodeURIComponent(document.getElementById("style_pic").src.split('///')[1])
@@ -65,10 +61,7 @@ var vm = new Vue({
             dempic_name = dempic_link.split('/')[dempic_link.split('/').length - 1]
             let outputFile = this.styleText + '_' + dempic_name;
             let cmd = jointCommand(appPath + '/exe/', dempic_link, stylepic_link, outputFile)
-            Vue.set(vm, 'ProgressbarWidthData', 10);
-            //TODO:Loading 效果
             execCommandSync(cmd, appPath + '/exe/' + outputFile);
-            Vue.set(vm, 'showProgressbar', false);
         },
         openOutputFileDialog: function () {
             const {
@@ -96,12 +89,18 @@ function jointCommand(rootPath, contentPath, stylePath, outputPath) {
 }
 
 function execCommandSync(command, outputPath) {
-    const execSync = require('child_process').execSync;
-    try {
-        execSync(command);
+    Vue.set(vm, 'progressValue', 20 + Math.round(Math.random() * 20));
+    const exec = require('child_process').exec;
+    exec(command, (error, stdout, stderr) => {
+        if (error) {
+            console.error(`exec error: ${error}`);
+            return;
+        }
+        console.log(`stdout: ${stdout}`);
+        console.error(`stderr: ${stderr}`);
         console.log("success");
+        Vue.set(vm, 'progressValue', 100);
         Vue.set(vm, 'resultpic', outputPath);
-    } catch (e) {
-        console.log("error");
-    }
+        this.progressValueShow = false;
+    })
 }

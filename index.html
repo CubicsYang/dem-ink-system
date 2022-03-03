@@ -67,8 +67,16 @@
       <button type="button" id="btn_task" class="btn btn-primary btn-lg btn-block"
         v-on:click="transfer_btn">开始转换(运行需要约10s)</button>
     </div>
+    <br>
+    <div class="progress" v-if="progressValueShow">
+      <div class="progress-bar" role="progressbar" :aria-valuenow="progressValue" aria-valuemin="0" aria-valuemax="100"
+        :style="'width:' + progressValue + '%'">
+        {{ progressValue }}%
+      </div>
+    </div>
   </div>
-  <script src="./renderer.js"></script>
+  <script src=" ./renderer.js">
+  </script>
 </body>
 <script>
 </script>
