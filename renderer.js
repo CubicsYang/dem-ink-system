@@ -4,19 +4,24 @@
 // `nodeIntegration` is turned off. Use `preload.js` to
 // selectively enable features needed in the rendering
 // process.
-
+// const {
+//     dialog
+// } = require('electron').remote
+// let WIN = new BrowserWindow({
+//     width: 800,
+//     height: 600
+// })
 var vm = new Vue({
     el: '#container',
     data() {
         return {
-            //TODO:更改选择文件栏默认为空
-            dempic: "./exe/yuanshi22.jpg",
-            stylepic: "./exe/fg1.jpg",
+            dempic: "./assets/res/img/yuanshi22.jpg",
+            stylepic: "./assets/res/img/fg1.jpg",
             resultpic: "https://static.runoob.com/images/mix/cinqueterre.jpg",
             styleText: "披麻皴",
             //appPath: "G:\dem-ink-system",
             appPath: __dirname,
-            items: []
+            items: [],
         }
     },
     created() {
@@ -28,7 +33,6 @@ var vm = new Vue({
             .catch(function (error) {
                 console.log(error);
             });
-        console.log(this.appPath)
     },
     methods: {
         dempicSelected: (event) => {
@@ -37,6 +41,7 @@ var vm = new Vue({
             Vue.set(vm, 'dempic', path);
         },
         styleSelected: (event) => {
+
             selectValue = event.target.innerText
             axios.get('assets/res/style.json')
                 .then(function (response) {
@@ -48,17 +53,35 @@ var vm = new Vue({
                         }
                     });
                 })
+
         },
         transfer_btn: function () {
+
             let appPath = this.appPath;
             //stylepic_link:G:/dem-ink-system/exe/fg1.jpg
             stylepic_link = decodeURIComponent(document.getElementById("style_pic").src.split('///')[1])
             stylepic_name = stylepic_link.split('/')[stylepic_link.split('/').length - 1]
             dempic_link = decodeURIComponent(document.getElementById("dem_pic").src.split('///')[1])
             dempic_name = dempic_link.split('/')[dempic_link.split('/').length - 1]
-            let outputPath = 'yuanshi22_fg1.jpg';
-            let cmd = jointCommand(appPath + '/exe/', dempic_link, stylepic_link, outputPath)
-            execCommandSync(cmd, appPath + '/exe/' + outputPath);
+            let outputFile = this.styleText + '_' + dempic_name;
+            let cmd = jointCommand(appPath + '/exe/', dempic_link, stylepic_link, outputFile)
+            Vue.set(vm, 'ProgressbarWidthData', 10);
+            //TODO:Loading 效果
+            execCommandSync(cmd, appPath + '/exe/' + outputFile);
+            Vue.set(vm, 'showProgressbar', false);
+        },
+        openOutputFileDialog: function () {
+            const {
+                dialog
+            } = require('electron').remote;
+            let options = {
+                title: "生成图片目录",
+                filters: [{
+                    name: 'Images',
+                    extensions: ['jpg']
+                }]
+            }
+            dialog.showOpenDialog(options)
         }
     }
 })
@@ -81,5 +104,4 @@ function execCommandSync(command, outputPath) {
     } catch (e) {
         console.log("error");
     }
-
 }

@@ -1,10 +1,22 @@
 [
     {
         "style": "披麻皴",
-        "link": "assets/res/img/fg1披麻皴.jpg"
+        "link": "assets/res/img/fg1.jpg"
     },
     {
         "style": "荷叶皴",
-        "link": "assets/res/img/fg2荷叶皴.jpg"
+        "link": "assets/res/img/fg2.jpg"
+    },
+    {
+        "style": "斧劈皴",
+        "link": "assets/res/img/fg3.jpg"
+    },
+    {
+        "style": "豆瓣皴",
+        "link": "assets/res/img/fg4.jpg"
+    },
+    {
+        "style": "米点皴",
+        "link": "assets/res/img/fg5.jpg"
     }
 ]
